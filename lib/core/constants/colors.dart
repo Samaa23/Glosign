@@ -20,6 +20,8 @@ class AppColors {
 
   static final Color iconLight = Colors.grey[400]!;
 
-  static final Color primaryOpacity50 = Colors.blueAccent.withOpacity(0.5);
-  static final Color primaryOpacity30 = Colors.blueAccent.withOpacity(0.3);
+  static final Color primaryOpacity30 = Colors.blueAccent.withAlpha(77);   // 30% = 255 * 0.3 = 76.5 ≈ 77
+  static final Color primaryOpacity50 = Colors.blueAccent.withAlpha(128); // 50% = 255 * 0.5 = 128
+  static final Color primaryOpacity80 = Colors.blueAccent.withAlpha(204); // 80% = 255 * 0.8 = 204
+  //
 }
