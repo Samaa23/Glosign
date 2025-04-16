@@ -206,6 +206,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         selectedStatus = newValue!;
                       });
                     },
+
                     items: ['normal', 'silent'].map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,

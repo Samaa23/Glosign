@@ -133,6 +133,5 @@ class _ForgetPassScr1State extends State<ForgetPassScr1> {
         ),
       ),
     );
-
   }
 }

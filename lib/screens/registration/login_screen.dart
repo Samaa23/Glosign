@@ -87,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: AppColors.textPrimary,
                                   fontSize: 14,
                                 ),
+
                                 obscureText: obscureText,
                                 decoration: InputDecoration(
                                   filled: true,

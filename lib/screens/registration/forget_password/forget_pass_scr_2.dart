@@ -98,6 +98,7 @@ class _ForgetPassScr2State extends State<ForgetPassScr2> {
             ),
           ),
         ]),
+
       ),
     );
   }

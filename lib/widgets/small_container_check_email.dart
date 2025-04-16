@@ -19,4 +19,5 @@ class SmallContainerCheckEmail extends StatelessWidget {
       ),
     );
   }
+
 }

@@ -34,7 +34,6 @@ Widget buildTopCircleDecorations() {
   );
 }
 
-
 Widget buildBottomCircleDecorations() {
   return Stack(
     children: [
