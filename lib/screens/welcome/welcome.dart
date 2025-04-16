@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled1/core/constants/colors.dart';
+import 'package:untitled1/core/constants/functions.dart';
+import 'package:untitled1/screens/onboarding/onboarding1_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,33 +29,12 @@ class WelcomePage extends StatelessWidget {
       body: Stack(
         children: [
           // top left circles
-          Positioned(
-            top: -60,
-            left: -10,
-            child: Container(
-              width: 160,
-              height: 160,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primaryOpacity50,
-              ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: -60,
-            child: Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primaryOpacity50,
-              ),
-            ),
-          ),
+          buildTopCircleDecorations(),
+          SizedBox(height: 100,),
 
           // main content
-          Center(
+          Align(
+            alignment: Alignment(0, 0.2), // قيمة Y أكبر من 0 تعني أسفل الوسط
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
@@ -63,11 +44,7 @@ class WelcomePage extends StatelessWidget {
                     'assets/icons/Glosihn_icon.png',
                     height: 120,
                   ),
-                  const SizedBox(height: 24),
-
-                  const SizedBox(height: 32),
-
-                  // الترحيب
+                  const SizedBox(height: 30),
                   const Text(
                     'Welcome to GloSign!',
                     style: TextStyle(
@@ -75,25 +52,24 @@ class WelcomePage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
-
-                  const Text(
+                  const SizedBox(height: 25),
+                  Text(
                     'Where speech becomes sign,\nand sign becomes speech.\nWe\'re here to make\ncommunication easier and\nmore inclusive for everyone.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
-                      color:AppColors.textPrimary,
-                      height: 1.5,
+                      color: AppColors.textSecondary,
                     ),
                   ),
-                  const SizedBox(height: 40),
-
-                  // زر Get Started
+                  const SizedBox(height: 80),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        // اكشن عند الضغط
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Onboarding1Screen()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
@@ -104,14 +80,14 @@ class WelcomePage extends StatelessWidget {
                       ),
                       child: const Text(
                         'Get Started',
-                        style: TextStyle(fontSize: 16,color: Colors.white),
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
+          )
         ],
       ),
     );
