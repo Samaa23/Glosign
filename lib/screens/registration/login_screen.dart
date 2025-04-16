@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled1/core/constants/colors.dart';
 import 'package:untitled1/core/constants/functions.dart';
+import 'package:untitled1/screens/registration/forget_password/forget_pass_scr_1.dart';
 import 'package:untitled1/screens/registration/signUp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -57,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   hintText: "Enter Your Email",
                                   hintStyle: TextStyle(
-                                    color: Colors.grey[500],
+                                    color: AppColors.textSecondary,
                                     fontSize: 14,
                                   ),
                                   prefixIcon: Icon(Icons.email_outlined,size: 20,),
@@ -73,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
                                     borderSide: BorderSide(
-                                      color: AppColors.textPrimary,
+                                      color: AppColors.primary,
                                       width: 2,
                                     ),
                                   ),
@@ -123,17 +124,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
                                     borderSide: BorderSide(
-                                      color: AppColors.textPrimary,
-                                      width: 2,
+                                      color: AppColors.primary,
+                                      width: 1,
                                     ),
                                   ),
                                 ),
                               ),
 
                               const SizedBox(height: 70),
-                              Text(textAlign: TextAlign.center,
-                                "Forget password ?",
-                                style: TextStyle(color: AppColors.primary,fontSize: 14),
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgetPassScr1()));
+                                },
+                                child: Text(textAlign: TextAlign.center,
+                                  "Forget password ?",
+                                  style: TextStyle(color: AppColors.primary,fontSize: 14),
+                                ),
                               ),
                               SizedBox(height: 20,),
                               SizedBox(

@@ -15,51 +15,53 @@ class _Onboarding3ScreenState extends State<Onboarding3Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Column(
-        children: [
-          SizedBox(height: 300,
-          child:
-              Stack(
-                children: [
-                  Positioned(
-                      top: -300,
-                      right: -138,
-                      child: Container(
-                        height: 600,
-                        width: 600,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.primary,
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xFF90C5FF),
-                              Colors.blueAccent,
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomLeft,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 300,
+            child:
+                Stack(
+                  children: [
+                    Positioned(
+                        top: -300,
+                        right: -138,
+                        child: Container(
+                          height: 600,
+                          width: 600,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.primary,
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0xFF90C5FF),
+                                Colors.blueAccent,
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomLeft,
+                            ),
                           ),
-                        ),
-                      )
-                  )
-                ],
-              )
-          ),
-          Image.asset("assets/images/onboarding3.png"),
-          Text("Keep in touch seamlessly!",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: AppColors.textPrimary,
-          ),),
-          SizedBox(height: 20,),
-          Text(
-            textAlign: TextAlign.center,
-            "Glosign is designed to be easy to use for \neveryone.",
-          style: TextStyle(
-            fontSize: 14,
-            color: AppColors.textSecondary,
-          ),)
-        ],
+                        )
+                    )
+                  ],
+                )
+            ),
+            Image.asset("assets/images/onboarding3.png"),
+            Text("Keep in touch seamlessly!",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: AppColors.textPrimary,
+            ),),
+            SizedBox(height: 20,),
+            Text(
+              textAlign: TextAlign.center,
+              "Glosign is designed to be easy to use for \neveryone.",
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+            ),)
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,

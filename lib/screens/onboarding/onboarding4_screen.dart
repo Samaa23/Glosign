@@ -14,50 +14,52 @@ class _Onboarding4ScreenState extends State<Onboarding4Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Column(
-        children: [
-           Stack(
-            children: [
-              ClipPath(
-                clipper: TopWaveOnboarding4(),
-                child: Container(
-                  height: 400,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF90C5FF),
-                        Colors.blueAccent,
-                      ],
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+             Stack(
+              children: [
+                ClipPath(
+                  clipper: TopWaveOnboarding4(),
+                  child: Container(
+                    height: 400,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF90C5FF),
+                          Colors.blueAccent,
+                        ],
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                    ),
                   ),
-                ),
-              )),
-              Positioned(
-                top: 60,
-                left: 52,
-                height: 430,
-                width: 350,
-                child: Image.asset("assets/images/onboarding4.png",),
-              )
-            ],
-          ),
-          SizedBox(height: 70,),
-          Text("Stay informed with real-time insights!",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: AppColors.textPrimary,
-          ),),
-          SizedBox(height: 20,),
-          Text(" Glosign provides detailed \nstatistics to help you make \nsmarter \ndecisions with ease",
+                )),
+                Positioned(
+                  top: 60,
+                  left: 52,
+                  height: 430,
+                  width: 350,
+                  child: Image.asset("assets/images/onboarding4.png",),
+                )
+              ],
+            ),
+            SizedBox(height: 70,),
+            Text("Stay informed with real-time insights!",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 14,
-              color: AppColors.textSecondary,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: AppColors.textPrimary,
             ),),
-        ],
+            SizedBox(height: 20,),
+            Text(" Glosign provides detailed \nstatistics to help you make \nsmarter \ndecisions with ease",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.textSecondary,
+              ),),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,

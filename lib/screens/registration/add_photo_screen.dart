@@ -66,7 +66,7 @@ class AddPhotoScreen extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 100), // بدل Spacer()
+                  SizedBox(height: 100),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
