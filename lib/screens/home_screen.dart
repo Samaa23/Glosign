@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:untitled1/screens/profile_screen.dart';
-import 'package:untitled1/screens/settings_screen.dart';
+
 import 'package:untitled1/screens/statistics_screen.dart';
 import '../core/constants/colors.dart';
+import '../widgets/drawer.dart';
 import '../widgets/home_button.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -19,6 +21,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
+
       body: Stack(
         children: [
           Positioned(
@@ -45,7 +48,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-
           SafeArea(
             child: Column(
               children: [
@@ -58,35 +60,21 @@ class HomeScreen extends StatelessWidget {
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 40),
-                //HomeButton(
-                //text: "Chat",
-                // onTap: () => navigateTo(context, const ChatScreen()),
-                //),
-                // HomeButton(
-                // text: "Favorite Messages",
-                //onTap: () => navigateTo(context, const FavoriteMessagesScreen()),
-                //),
-                // HomeButton(
-                // text: "Favorite Chats",
-                //onTap: () => navigateTo(context, const FavoriteChatsScreen()),
-                //),
-
-                HomeButton(
-                  text: "Statistics",
-                  fontWeight: FontWeight.bold,
-                  onTap: () => navigateTo(context, const StatisticsScreen()),
-                ),
+                const SizedBox(height: 50),
                 HomeButton(
                   text: "Profile",
                   fontWeight: FontWeight.bold,
-                  onTap: () => navigateTo(context, const ProfileScreen()),
+                  onTap: () => navigateTo(context,  ProfileScreen()),
                 ),
+                const SizedBox(height: 20),
                 HomeButton(
-                  text: "Settings",
+                  text: "Statistics",
                   fontWeight: FontWeight.bold,
-                  onTap: () => navigateTo(context, const SettingsScreen()),
+                  onTap: () => navigateTo(context, StatisticsScreen()),
                 ),
+
+
+
               ],
             ),
           ),

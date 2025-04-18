@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:untitled1/screens/home_screen.dart';
+import 'package:untitled1/screens/notification_screen.dart';
+import 'package:untitled1/screens/profile_screen.dart';
+import 'package:untitled1/screens/statistics_screen.dart';
 import 'package:untitled1/screens/welcome/welcome.dart';
 
 void main() {
@@ -12,7 +16,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+       '/home':(context)=>HomeScreen(),
+        '/profile':(context)=>ProfileScreen(),
+        '/statistics':(context)=>StatisticsScreen(),
+        '/notifications': (context) => NotificationsScreen(),
+
+
+
+      },
       home: WelcomePage(),
+      //WelcomePage(),
     );
   }
 }
