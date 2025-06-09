@@ -16,7 +16,7 @@ class CustomDrawer extends StatelessWidget {
             accountName: Text('Glosign', style: TextStyle(fontSize: 20,color: Colors.black)),
             accountEmail: Text('Sign Language', style: TextStyle(color: Colors.black)),
             currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.background,
               child: Icon(Icons.language, color: Colors.blue),
             ),
           ),

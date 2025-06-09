@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled1/screens/chat_screen.dart';
 import 'package:untitled1/screens/profile_screen.dart';
 
 import 'package:untitled1/screens/statistics_screen.dart';
@@ -72,7 +73,12 @@ class HomeScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   onTap: () => navigateTo(context, StatisticsScreen()),
                 ),
-
+                const SizedBox(height: 20),
+                HomeButton(
+                  text: "Chat",
+                  fontWeight: FontWeight.bold,
+                  onTap: () => navigateTo(context,SimpleChatScreen()),
+                ),
 
 
               ],
