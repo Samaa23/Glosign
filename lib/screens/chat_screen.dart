@@ -1,92 +1,72 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:record/record.dart';
-import 'package:uuid/uuid.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
-
 import '../core/constants/colors.dart';
+import '../models/api_response_model.dart';
+import '../services/api_service.dart';
+import '../widgets/record_button.dart';
 
-class SimpleChatScreen extends StatefulWidget {
-  const SimpleChatScreen({super.key});
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
-  State<SimpleChatScreen> createState() => _SimpleChatScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _SimpleChatScreenState extends State<SimpleChatScreen> {
-  final record = AudioRecorder();
-  bool isRecording = false;
+class _ChatScreenState extends State<ChatScreen> {
+  String? textResult;
+  String? signImageUrl;
+  File? recordedFile;
+  bool isLoading = false;
 
-  late stt.SpeechToText _speech;
-  String _spokenText = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _speech = stt.SpeechToText();
+  void _handleRecordingComplete(File file) {
+    setState(() {
+      recordedFile = file;
+      textResult = null;
+      signImageUrl = null;
+    });
   }
 
-  Future<void> toggleRecording() async {
-    if (await record.hasPermission()) {
-      if (!isRecording) {
-        final fileName = '${const Uuid().v4()}.m4a';
-        print('🎤 بدء التسجيل: $fileName');
-        await record.start(const RecordConfig(), path: '');
-      } else {
-        final path = await record.stop();
-        print('🛑 تم إيقاف التسجيل. تم حفظه في: $path');
-      }
+  Future<void> _handleConvert(String type) async {
+    if (recordedFile == null) return;
 
-      setState(() {
-        isRecording = !isRecording;
-      });
-    } else {
-      print('❌ مفيش صلاحيات للتسجيل!');
-    }
-  }
+    setState(() {
+      isLoading = true;
+    });
 
-  Future<void> convertSpeechToText() async {
-    bool available = await _speech.initialize();
-
-    if (available) {
-      await _speech.listen(
-        onResult: (result) {
-          setState(() {
-            _spokenText = result.recognizedWords;
-          });
-          print("📄 النص: $_spokenText");
-        },
+    try {
+      final response = await ApiService.sendAudio(
+        audioFile: recordedFile!,
+        type: type,
       );
 
-      Future.delayed(const Duration(seconds: 5), () async {
-        await _speech.stop();
+      if (response == null) {
+        _showError("فشل في الاتصال بالخادم");
+      } else {
+        setState(() {
+          textResult = response.resultText;
+          signImageUrl = response.signUrl;
+        });
+      }
+    } catch (e) {
+      _showError("حدث خطأ أثناء المعالجة");
+    } finally {
+      setState(() {
+        isLoading = false;
       });
-    } else {
-      print('❌ Speech recognition unavailable');
     }
   }
 
-  List<String> getSignImages(String text) {
-    final words = text.toLowerCase().split(' ');
-    return words.map((word) => 'assets/signs/$word.png').toList();
+  void _resetRecording() {
+    setState(() {
+      recordedFile = null;
+      textResult = null;
+      signImageUrl = null;
+    });
   }
 
-  void showSignsDialog(BuildContext context, List<String> images) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("لغة الإشارة"),
-        content: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: images.map((img) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(img, height: 100),
-              );
-            }).toList(),
-          ),
-        ),
-      ),
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
     );
   }
 
@@ -96,17 +76,19 @@ class _SimpleChatScreenState extends State<SimpleChatScreen> {
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
+          // الدوائر على جهة اليسار
           Positioned(
-        top: -60,
-        left: -10,
-        child: Container(
-          width: 160,
-          height: 160,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.primaryOpacity50,
+            top: -60,
+            left: -10,
+            child: Container(
+              width: 160,
+              height: 160,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.primaryOpacity50,
+              ),
             ),
-          )),
+          ),
           Positioned(
             top: 0,
             left: -60,
@@ -116,75 +98,109 @@ class _SimpleChatScreenState extends State<SimpleChatScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.primaryOpacity50,
-            ),
-          )),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'GloSign Chat',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton.icon(
-                  onPressed: toggleRecording,
-                  icon: Icon(isRecording ? Icons.stop : Icons.mic),
-                  label: Text(isRecording ? 'إيقاف التسجيل' : 'تسجيل الصوت'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: convertSpeechToText,
-                  icon: const Icon(Icons.text_fields),
-                  label: const Text("تحويل إلى نص"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:Colors.white,
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    final images = getSignImages(_spokenText);
-                    showSignsDialog(context, images);
-                  },
-                  icon: const Icon(Icons.sign_language),
-                  label: const Text("تحويل إلى لغة إشارة"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:Colors.white ,
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                if (_spokenText.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      "📝 النص المكتشف:\n$_spokenText",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ),
-              ],
+              ),
             ),
           ),
+
+          // محتوى الشاشة الرئيسي
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // زر التسجيل في منتصف الشاشة بالضبط
+                    RecordButtons(
+                      onRecordingComplete: _handleRecordingComplete,
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    if (recordedFile != null)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: isLoading ? null : () => _handleConvert("text"),
+                            child: isLoading
+                                ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                                : const Text("تحويل إلى نص"),
+                          ),
+                          ElevatedButton(
+                            onPressed: isLoading ? null : () => _handleConvert("sign"),
+                            child: isLoading
+                                ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                                : const Text("تحويل إلى إشارة"),
+                          ),
+                          ElevatedButton(
+                            onPressed: isLoading ? null : _resetRecording,
+                            child: const Text("إعادة تسجيل"),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.redAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                    const SizedBox(height: 20),
+
+                    if (textResult != null)
+                      Text(
+                        "📜 النص: $textResult",
+                        style: const TextStyle(fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+
+                    if (signImageUrl != null)
+                      Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          const Text(
+                            "🧏 لغة الإشارة:",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          const SizedBox(height: 8),
+                          Image.network(
+                            signImageUrl!,
+                            errorBuilder: (context, error, stackTrace) => const Icon(
+                              Icons.broken_image,
+                              size: 100,
+                              color: Colors.grey,
+                            ),
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return const SizedBox(
+                                height: 100,
+                                child: Center(child: CircularProgressIndicator()),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          if (isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black45,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ),
         ],
       ),
     );

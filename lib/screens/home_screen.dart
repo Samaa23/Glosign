@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                 HomeButton(
                   text: "Chat",
                   fontWeight: FontWeight.bold,
-                  onTap: () => navigateTo(context,SimpleChatScreen()),
+                  onTap: () => navigateTo(context,ChatScreen()),
                 ),
 
 
