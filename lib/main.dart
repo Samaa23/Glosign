@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled1/screens/chat_screen.dart';
 import 'package:untitled1/screens/home_screen.dart';
 import 'package:untitled1/screens/notification_screen.dart';
 import 'package:untitled1/screens/profile_screen.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/profile':(context)=>ProfileScreen(),
         '/statistics':(context)=>StatisticsScreen(),
         '/notifications': (context) => NotificationsScreen(),
+        '/chats': (context) => ChatsPage(),
 
 
 

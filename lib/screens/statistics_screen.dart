@@ -45,8 +45,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   ),
                 ),
                 SizedBox(height: 8),
-
-                // Using Time
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -120,7 +118,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   ),
                 ),
                 SizedBox(height: 8),
-
                 Row(
                   children: [
                     Expanded(
@@ -194,7 +191,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 SizedBox(height: 20),
 
                 // Circular Percent Indicator
-                Center(
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 16),
                   child: CircularPercentIndicator(
                     radius: 100.0,
                     lineWidth: 13.0,

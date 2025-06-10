@@ -17,7 +17,7 @@ class CustomDrawer extends StatelessWidget {
             accountEmail: Text('Sign Language', style: TextStyle(color: Colors.black)),
             currentAccountPicture: CircleAvatar(
               backgroundColor: AppColors.background,
-              child: Icon(Icons.language, color: Colors.blue),
+              child: Icon(Icons.sign_language, color: Colors.blue),
             ),
           ),
 
@@ -47,7 +47,7 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.chat_bubble_outline),
             title: Text('Chats'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/favorite-chats');
+              Navigator.pushReplacementNamed(context, '/chats');
             },
           ),
 

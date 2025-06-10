@@ -1,207 +1,109 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+
 import '../core/constants/colors.dart';
-import '../models/api_response_model.dart';
-import '../services/api_service.dart';
-import '../widgets/record_button.dart';
+import '../widgets/drawer.dart';
+import 'new_chat.dart';
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ChatScreen> createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatScreen> {
-  String? textResult;
-  String? signImageUrl;
-  File? recordedFile;
-  bool isLoading = false;
-
-  void _handleRecordingComplete(File file) {
-    setState(() {
-      recordedFile = file;
-      textResult = null;
-      signImageUrl = null;
-    });
-  }
-
-  Future<void> _handleConvert(String type) async {
-    if (recordedFile == null) return;
-
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      final response = await ApiService.sendAudio(
-        audioFile: recordedFile!,
-        type: type,
-      );
-
-      if (response == null) {
-        _showError("فشل في الاتصال بالخادم");
-      } else {
-        setState(() {
-          textResult = response.resultText;
-          signImageUrl = response.signUrl;
-        });
-      }
-    } catch (e) {
-      _showError("حدث خطأ أثناء المعالجة");
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  void _resetRecording() {
-    setState(() {
-      recordedFile = null;
-      textResult = null;
-      signImageUrl = null;
-    });
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
+class ChatsPage extends StatelessWidget {
+  const ChatsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Dummy data to simulate fetching from database
+    final List<Map<String, dynamic>> chatData = [
+      {
+        'name': 'Chat 1',
+        'lastMessage': 'مرحبا، كيف حالك؟',
+        'hasVideo': true,
+      },
+      {
+        'name': 'Chat 2',
+        'lastMessage': 'أريد شراء منتج معين',
+        'hasVideo': false,
+      },
+    ];
+
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Stack(
-        children: [
-          // الدوائر على جهة اليسار
-          Positioned(
-            top: -60,
-            left: -10,
-            child: Container(
-              width: 160,
-              height: 160,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primaryOpacity50,
-              ),
+      endDrawer: CustomDrawer(),
+      appBar: AppBar(
+        backgroundColor: AppColors.primary,
+        title: const Text('Chats', style: TextStyle(color: Colors.white)),
+        centerTitle: true,
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu, color: AppColors.textPrimary),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
             ),
           ),
-          Positioned(
-            top: 0,
-            left: -60,
-            child: Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primaryOpacity50,
-              ),
-            ),
-          ),
-
-          // محتوى الشاشة الرئيسي
-          SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // زر التسجيل في منتصف الشاشة بالضبط
-                    RecordButtons(
-                      onRecordingComplete: _handleRecordingComplete,
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    if (recordedFile != null)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: isLoading ? null : () => _handleConvert("text"),
-                            child: isLoading
-                                ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                                : const Text("تحويل إلى نص"),
-                          ),
-                          ElevatedButton(
-                            onPressed: isLoading ? null : () => _handleConvert("sign"),
-                            child: isLoading
-                                ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                                : const Text("تحويل إلى إشارة"),
-                          ),
-                          ElevatedButton(
-                            onPressed: isLoading ? null : _resetRecording,
-                            child: const Text("إعادة تسجيل"),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.redAccent,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                    const SizedBox(height: 20),
-
-                    if (textResult != null)
-                      Text(
-                        "📜 النص: $textResult",
-                        style: const TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center,
-                      ),
-
-                    if (signImageUrl != null)
-                      Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          const Text(
-                            "🧏 لغة الإشارة:",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          const SizedBox(height: 8),
-                          Image.network(
-                            signImageUrl!,
-                            errorBuilder: (context, error, stackTrace) => const Icon(
-                              Icons.broken_image,
-                              size: 100,
-                              color: Colors.grey,
-                            ),
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return const SizedBox(
-                                height: 100,
-                                child: Center(child: CircularProgressIndicator()),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          if (isLoading)
-            Positioned.fill(
-              child: Container(
-                color: Colors.black45,
-                child: const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            ),
         ],
+      ),
+
+      body: ListView(
+        padding: const EdgeInsets.all(16.0),
+        children: [
+          ...chatData.map((chat) => ChatTile(
+            name: chat['name'],
+            lastMessage: chat['lastMessage'],
+            hasVideo: chat['hasVideo'],
+            onTap: () {},
+          )),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(vertical: 14),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const NewChatPage()),
+              );
+            },
+            icon: const Icon(Icons.add),
+            label: const Text('Start New Chat'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ChatTile extends StatelessWidget {
+  final String name;
+  final String lastMessage;
+  final bool hasVideo;
+  final VoidCallback onTap;
+
+  const ChatTile({
+    Key? key,
+    required this.name,
+    required this.lastMessage,
+    required this.hasVideo,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        onTap: onTap,
+        title: Text(name, style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
+        subtitle: Row(
+          children: [
+            Expanded(child: Text(lastMessage, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: AppColors.textSecondary))),
+            if (hasVideo) const Icon(Icons.video_library, color: Colors.blueAccent, size: 20),
+          ],
+        ),
       ),
     );
   }
