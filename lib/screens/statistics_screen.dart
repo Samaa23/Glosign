@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 import '../core/constants/colors.dart';
+import '../widgets/drawer.dart';
 
 class StatisticsScreen extends StatefulWidget {
   @override
@@ -16,6 +18,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
+      endDrawer: CustomDrawer(),
       appBar: AppBar(
         backgroundColor: AppColors.background,
         title: Center(child: Text('Statistics')),
@@ -118,7 +121,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 ),
                 SizedBox(height: 8),
 
-                // Dropdown for Month and Year
                 Row(
                   children: [
                     Expanded(
@@ -128,8 +130,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           labelText: 'Month',
                           border: OutlineInputBorder(),
                         ),
-                        items: <String>['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: <String>[
+                          'January', 'February', 'March', 'April', 'May', 'June',
+                          'July', 'August', 'September', 'October', 'November', 'December'
+                        ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -181,31 +185,38 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 4),
+                  height: 3,
+                  width: 150,
+                  color: Colors.blue,
+                ),
+                SizedBox(height: 20),
 
-                // Circular Progress Indicator
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Circle Background
-                      CircularProgressIndicator(
-                        value: _usagePercentage / 100,
-                        strokeWidth: 12,
-                        backgroundColor: Colors.grey[300],
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                      ),
-
-                      // Center Text
-                      Text(
-                        '${_totalCharge} %',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                // Circular Percent Indicator
+                Center(
+                  child: CircularPercentIndicator(
+                    radius: 100.0,
+                    lineWidth: 13.0,
+                    animation: true,
+                    percent: _usagePercentage / 100,
+                    center: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Total charge",
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
                         ),
-                      ),
-                    ],
+                        SizedBox(height: 5),
+                        Text(
+                          "$_totalCharge %",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0),
+                        ),
+                      ],
+                    ),
+                    circularStrokeCap: CircularStrokeCap.round,
+                    progressColor: Colors.blue,
+                    backgroundColor: Colors.redAccent,
                   ),
                 ),
               ],

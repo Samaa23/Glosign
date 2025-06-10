@@ -30,34 +30,6 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.mic),
-            title: Text('Voice to gesture'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/voice-to-gesture');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.format_list_numbered),
-            title: Text('Voice to text'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/voice-to-text');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text('Favorite Messages'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/favorite-messages');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.chat_bubble_outline),
-            title: Text('Favorite Chats'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/favorite-chats');
-            },
-          ),
-          ListTile(
             leading: Icon(Icons.person_outlined),
             title: Text('Profile'),
             onTap: () {
@@ -69,6 +41,13 @@ class CustomDrawer extends StatelessWidget {
             title: Text('Statistics'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/statistics');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.chat_bubble_outline),
+            title: Text('Chats'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/favorite-chats');
             },
           ),
 
